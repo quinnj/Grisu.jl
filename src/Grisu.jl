@@ -14,24 +14,30 @@ const SHORTEST_SINGLE = 2
 const FIXED = 3
 const PRECISION = 4
 
+const NEG    = Array(Bool)
+const DIGITS = Array(Uint8,309+17)
+const BUFLEN = int32(length(DIGITS)+1)
+const LEN    = Array(Int32)
+const POINT  = Array(Int32)
+
 function grisu(
             v::Float64,
             mode,
             requested_digits::Int,
-            buffer::Vector{Char},
-            buffer_length::Int)
-    if sign(x) < 0
-        sign = true
+            buffer::Vector{Uint8}=DIGITS,
+            buffer_length=BUFLEN)
+    if sign(v) < 0
+        s = true
         v = -v
     else
-        sign = false
+        s = false
     end
     if mode == PRECISION && requested_digits == 0
-        len = 0
-        return buffer, sign, len, point
+        len = 1
+        return len, point, buffer, s
     end
     if v == 0.0
-        buffer[1] = '0'
+        buffer[1] = 0x30
         len = point = 1
     end
     if mode == SHORTEST
@@ -43,8 +49,9 @@ function grisu(
     elseif mode == PRECISION
         status,len,point,buffer = Grisu.fastdtoa(v, Grisu.FAST_DTOA_PRECISION, requested_digits,buffer)
     end
-    status && return status,len,point,buffer
-    return Grisu.bignumdtoa(v,mode,requested_digits,buffer)
+    status && return len, point, buffer, s
+    len, point, buffer = Grisu.bignumdtoa(v,mode,requested_digits,buffer)
+    return len, point, buffer, s
 end
 
 end # module
