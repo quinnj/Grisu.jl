@@ -29,12 +29,12 @@ function roundweed(buffer,len,rest,tk,unit,kappa,null1::Int=0,null2::Int=0)
     if rest > unit && (tk - (rest - unit) <= (rest - unit))
         buffer[len-1] += 1
         for i = (len-1):-1:2
-            buffer[i] != '0' + 10 && break
-            buffer[i] = '0'
+            buffer[i] != 0x30 + 10 && break
+            buffer[i] = 0x30
             buffer[i-1] += 1
         end
-        if buffer[1] == '0' + 10
-            buffer[1] = '1'
+        if buffer[1] == 0x30 + 10
+            buffer[1] = 0x31
             kappa += 1
         end
         return true, kappa
@@ -77,7 +77,7 @@ function DigitGen(low::Float,w::Float,high::Float,
     while kappa > 0
         digit::Int32 = div(integrals,divisor)
         #@assert(digit <= 9)
-        buffer[len] = '0' + digit
+        buffer[len] = 0x30 + digit
         len += 1
         requested_digits -= 1
         integrals %= divisor
@@ -103,7 +103,7 @@ function DigitGen(low::Float,w::Float,high::Float,
         unsafe_interval = Float(unsafe_interval.s*10,unsafe_interval.e)
         digit::Int32 = fractionals >> -one.e
         #@assert(digit <= 9)
-        buffer[len] = '0' + digit
+        buffer[len] = 0x30 + digit
         len += 1
         requested_digits -= 1
         fractionals &= one.s - 1
@@ -121,7 +121,7 @@ function DigitGen(low::Float,w::Float,high::Float,
     return r, kappa, len
 end
 
-function fastdtoa(v,mode,requested_digits=1000,buffer=Array(Char,100))
+function fastdtoa(v,mode,requested_digits=1000,buffer=Array(Uint8,100))
     v = float64(v)
     f = normalize(v)
     shortest = true

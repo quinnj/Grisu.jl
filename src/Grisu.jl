@@ -5,7 +5,6 @@ include("fastdtoa.jl")
 include("fastfixedtoa.jl")
 include("bignum-dtoa.jl")
 #TODO
- #change fastdtoa to use Uint8 instead of Char
  #performance benchmarks
  #remove Float dependency?
  #
