@@ -1,5 +1,7 @@
-using Grisu
 using Base.Test
+using Grisu
 
-# write your own tests here
-@test 1 == 1
+include("float.jl")
+include("fastdtoa.jl")
+include("fastfixedtoa.jl")
+include("bignum-dtoa.jl")
