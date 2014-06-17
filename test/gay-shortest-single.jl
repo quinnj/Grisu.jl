@@ -29,7 +29,7 @@
 # have been generated using Gay's gdtoa to produce the shortest representation.
 
 immutable PrecomputedShortestSingle
-  v::Float64
+  v::Float32
   representation::ASCIIString
   decimal_point::Int
 end

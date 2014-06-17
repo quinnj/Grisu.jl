@@ -26,14 +26,14 @@ function normalize(v::Float)
     end
     return Float(f,e)
 end
-function normalize{T<:FloatingPoint}(v::T)
+function normalize(v::Float64)
     s = _significand(v); e = _exponent(v)
-    while (s & HiddenBit(T)) == 0
+    while (s & HiddenBit(Float64)) == 0
         s <<= uint64(1)
         e -= int32(1)
     end
-    s <<= uint64(FloatSignificandSize - SignificandSize(T))
-    e -=  int32( FloatSignificandSize - SignificandSize(T))
+    s <<= uint64(FloatSignificandSize - SignificandSize(Float64))
+    e -=  int32( FloatSignificandSize - SignificandSize(Float64))
     return Float(s, e)  
 end
 
